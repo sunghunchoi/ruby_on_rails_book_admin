@@ -16,8 +16,13 @@ class Book < ApplicationRecord
     end
   end
 
-  after_destroy do
-    Rails.logger.info "Book is deleted: #{self.attributes}"
+  after_destroy :if => :high_price? do
+    Rails.logger.warn "Book with high price is deleted: #{self.attributes}"
+    Rails.logger.warn "Please check!!"
+  end
+
+  def high_price?
+    price >= 5000
   end
 
   # validates do |book|
